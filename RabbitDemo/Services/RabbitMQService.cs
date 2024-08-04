@@ -3,6 +3,7 @@ using RabbitMQ.Client;
 using System.Text;
 using Newtonsoft.Json;
 using RabbitMQ.Client.Events;
+using System.Text.Encodings.Web;
 
 namespace RabbitDemo.Services
 {
@@ -49,9 +50,12 @@ namespace RabbitDemo.Services
 
             var consumer = new EventingBasicConsumer(channel);
 
+            var teste = "";
+
             consumer.Received += (model, ea) =>
             {
                 var body = ea.Body.ToArray();
+                teste = body.ToString();
                 var message = Encoding.UTF8.GetString(body);
 
                 var tcs = new TaskCompletionSource<bool>();
@@ -68,7 +72,7 @@ namespace RabbitDemo.Services
             channel.BasicConsume
              (
                  queue: queueName,
-                 autoAck: true, // the mensage its remove of queue after read
+                 autoAck: false, // the mensage its remove of queue after read
                  consumer: consumer
              );
 
@@ -77,7 +81,7 @@ namespace RabbitDemo.Services
                  //wait for messages
                  System.Threading.Thread.Sleep(100);
              }
-
+            Console.WriteLine(teste);
             return messages;
         }
 
@@ -96,6 +100,5 @@ namespace RabbitDemo.Services
             }
 
         }
-
     }
 }
