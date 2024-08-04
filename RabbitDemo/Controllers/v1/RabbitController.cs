@@ -49,5 +49,11 @@ namespace RabbitDemo.Controllers.v1
             return StatusCode(StatusCodes.Status201Created);
         }
 
+        [HttpGet("get-messages")]
+        public IActionResult GetMessages([FromQuery] string queueName, [FromQuery] int maxMessages)
+        {
+            var messages = _rabbitMQService.GetMessagesFromQueue(queueName, maxMessages);
+            return Ok(messages);
+        }
     }
 }

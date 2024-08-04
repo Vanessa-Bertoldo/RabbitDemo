@@ -2,6 +2,7 @@
 using RabbitMQ.Client;
 using System.Text;
 using Newtonsoft.Json;
+using RabbitMQ.Client.Events;
 
 namespace RabbitDemo.Services
 {
@@ -39,6 +40,62 @@ namespace RabbitDemo.Services
             channel.BasicPublish(exchange: "", routingKey: message.Destino, basicProperties: null, body: body);
         }
 
+        public List<string> GetMessagesFromQueue(string queueName, int maxMessages)
+        {
+            var connection = _connectionFactory.CreateConnection();
+            var channel = connection.CreateModel();
+
+            var messages = new List<string>();
+
+            var consumer = new EventingBasicConsumer(channel);
+
+            consumer.Received += (model, ea) =>
+            {
+                var body = ea.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+
+                var tcs = new TaskCompletionSource<bool>();
+
+                messages.Add(message);
+
+                if (messages.Count >= maxMessages)
+                {
+                    tcs.SetResult(true); // Notifies that the desired number of messages has been reached
+                }
+            };
+
+            //start consumer of messages
+            channel.BasicConsume
+             (
+                 queue: queueName,
+                 autoAck: true, // the mensage its remove of queue after read
+                 consumer: consumer
+             );
+
+             while(messages.Count < maxMessages)
+             {
+                 //wait for messages
+                 System.Threading.Thread.Sleep(100);
+             }
+
+            return messages;
+        }
+
+        public bool QueueExists(string queueName)
+        {
+            try
+            {
+                var connection = _connectionFactory.CreateConnection();
+                var channel = connection.CreateModel();
+                var result = channel.QueueDeclarePassive(queueName); //Try to declare the queue in passive mode
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
 
     }
 }
