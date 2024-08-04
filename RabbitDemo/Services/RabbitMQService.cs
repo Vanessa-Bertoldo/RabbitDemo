@@ -1,4 +1,7 @@
-﻿using RabbitMQ.Client;
+﻿using RabbitDemo.Models;
+using RabbitMQ.Client;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace RabbitDemo.Services
 {
@@ -24,5 +27,18 @@ namespace RabbitDemo.Services
             using var channel = connection.CreateModel();
             channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: System.Text.Encoding.UTF8.GetBytes(message));
         }
+
+        public void SendMessage(MensagemModel message)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            using var channel = connection.CreateModel();
+
+            var jsonMessage = JsonConvert.SerializeObject(message);
+            var body = Encoding.UTF8.GetBytes(jsonMessage);
+
+            channel.BasicPublish(exchange: "", routingKey: message.Destino, basicProperties: null, body: body);
+        }
+
+
     }
 }

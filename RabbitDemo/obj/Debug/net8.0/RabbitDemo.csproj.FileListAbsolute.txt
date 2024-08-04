@@ -32,3 +32,4 @@ C:\Users\Z\Documents\projetosFaculdade\RabbitProject\RabbitDemo\obj\Debug\net8.0
 C:\Users\Z\Documents\projetosFaculdade\RabbitProject\RabbitDemo\obj\Debug\net8.0\RabbitDemo.pdb
 C:\Users\Z\Documents\projetosFaculdade\RabbitProject\RabbitDemo\obj\Debug\net8.0\RabbitDemo.genruntimeconfig.cache
 C:\Users\Z\Documents\projetosFaculdade\RabbitProject\RabbitDemo\obj\Debug\net8.0\ref\RabbitDemo.dll
+C:\Users\Z\Documents\projetosFaculdade\RabbitProject\RabbitDemo\bin\Debug\net8.0\Newtonsoft.Json.dll
