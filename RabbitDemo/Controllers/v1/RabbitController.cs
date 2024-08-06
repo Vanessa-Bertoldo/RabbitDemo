@@ -45,7 +45,7 @@ namespace RabbitDemo.Controllers.v1
         [HttpPost("send-message-queue")]
         public IActionResult SendMessageForQueue(MensagemModel mensagem)
         {
-            _rabbitMQService.SendMessage(mensagem.Destino, mensagem.Mensagem);
+            _rabbitMQService.SendMessage(mensagem);
             return StatusCode(StatusCodes.Status201Created);
         }
 

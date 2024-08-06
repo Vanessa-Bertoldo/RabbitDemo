@@ -41,12 +41,12 @@ namespace RabbitDemo.Services
             channel.BasicPublish(exchange: "", routingKey: message.Destino, basicProperties: null, body: body);
         }
 
-        public List<string> GetMessagesFromQueue(string queueName, int maxMessages)
+        public List<MensagemModel> GetMessagesFromQueue(string queueName, int maxMessages)
         {
             var connection = _connectionFactory.CreateConnection();
             var channel = connection.CreateModel();
 
-            var messages = new List<string>();
+            var messages = new List<MensagemModel>();
 
             var consumer = new EventingBasicConsumer(channel);
 
@@ -55,12 +55,13 @@ namespace RabbitDemo.Services
             consumer.Received += (model, ea) =>
             {
                 var body = ea.Body.ToArray();
-                teste = body.ToString();
                 var message = Encoding.UTF8.GetString(body);
+
+                var mensagemModel = JsonConvert.DeserializeObject<MensagemModel>(message);
 
                 var tcs = new TaskCompletionSource<bool>();
 
-                messages.Add(message);
+                messages.Add(mensagemModel);
 
                 if (messages.Count >= maxMessages)
                 {
