@@ -101,5 +101,35 @@ namespace RabbitDemo.Services
             }
 
         }
+
+        public bool CreateExchangeFanout(string Name)
+        {
+            try
+            {
+                var connection = _connectionFactory.CreateConnection();
+                var channel = connection.CreateModel();
+                channel.ExchangeDeclare(exchange: Name, type: ExchangeType.Fanout);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool CreateExchangeDirect(string Name)
+        {
+            try
+            {
+                var connection = _connectionFactory.CreateConnection();
+                var channel = connection.CreateModel();
+                channel.ExchangeDeclare(exchange: Name, type: ExchangeType.Direct);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

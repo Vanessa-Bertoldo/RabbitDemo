@@ -49,11 +49,37 @@ namespace RabbitDemo.Controllers.v1
             return StatusCode(StatusCodes.Status201Created);
         }
 
+        /// <summary>
+        /// get messages in queue
+        /// </summary>
+        /// <returns>200</returns>
         [HttpGet("get-messages")]
         public IActionResult GetMessages([FromQuery] string queueName, [FromQuery] int maxMessages)
         {
             var messages = _rabbitMQService.GetMessagesFromQueue(queueName, maxMessages);
             return Ok(messages);
+        }
+
+        /// <summary>
+        /// send message to queue
+        /// </summary>
+        /// <returns>200</returns>
+        [HttpGet("create-exchange-fanout")]
+        public IActionResult CreateExchangeFanout([FromQuery] string exchangeName)
+        {
+            var retornMethod = _rabbitMQService.CreateExchangeFanout(exchangeName);
+            return Ok(retornMethod);
+        }
+
+        /// <summary>
+        /// send message to queue
+        /// </summary>
+        /// <returns>200</returns>
+        [HttpGet("create-exchange-direct")]
+        public IActionResult CreateExchangeDirect([FromQuery] string exchangeName)
+        {
+            var retornMethod = _rabbitMQService.CreateExchangeDirect(exchangeName);
+            return Ok(retornMethod);
         }
     }
 }
