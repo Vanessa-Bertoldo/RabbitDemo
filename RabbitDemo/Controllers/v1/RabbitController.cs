@@ -61,7 +61,7 @@ namespace RabbitDemo.Controllers.v1
         }
 
         /// <summary>
-        /// send message to queue
+        /// create exchange Fanout
         /// </summary>
         /// <returns>200</returns>
         [HttpGet("create-exchange-fanout")]
@@ -72,13 +72,24 @@ namespace RabbitDemo.Controllers.v1
         }
 
         /// <summary>
-        /// send message to queue
+        /// create exchange Direct
         /// </summary>
         /// <returns>200</returns>
         [HttpGet("create-exchange-direct")]
         public IActionResult CreateExchangeDirect([FromQuery] string exchangeName)
         {
             var retornMethod = _rabbitMQService.CreateExchangeDirect(exchangeName);
+            return Ok(retornMethod);
+        }
+
+        /// <summary>
+        /// send message to exchange
+        /// </summary>
+        /// <returns>200</returns>
+        [HttpGet("send-message-exchange")]
+        public IActionResult SendMessageExchange([FromQuery] string exchangeName, [FromQuery] string message)
+        {
+            var retornMethod = _rabbitMQService.SendMessageForExchange(exchangeName, message);
             return Ok(retornMethod);
         }
     }

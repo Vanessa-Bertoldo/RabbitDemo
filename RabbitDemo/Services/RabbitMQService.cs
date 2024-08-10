@@ -4,6 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 using RabbitMQ.Client.Events;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace RabbitDemo.Services
 {
@@ -129,6 +130,21 @@ namespace RabbitDemo.Services
             catch (Exception ex)
             {
                 return false;
+            }
+        }
+
+        public string SendMessageForExchange(string exchangeName, string message)
+        {
+            try
+            {
+                using var connection = _connectionFactory.CreateConnection();
+                using var channel = connection.CreateModel();
+                channel.BasicPublish(exchange: exchangeName, routingKey: "", basicProperties: null, body: System.Text.Encoding.UTF8.GetBytes(message));
+                return "Mensagem enviada";
+            }
+            catch (Exception ex)
+            {
+                return $"Erro ao enviar mensagem  {ex}";
             }
         }
     }
