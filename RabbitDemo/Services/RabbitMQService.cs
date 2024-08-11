@@ -118,17 +118,28 @@ namespace RabbitDemo.Services
             }
         }
 
-        public bool CreateExchangeDirect(string Name)
+        public bool CreateExchangeDirect(string exchangeName, string queueName)
         {
             try
             {
+                // create connection and channel
                 var connection = _connectionFactory.CreateConnection();
                 var channel = connection.CreateModel();
-                channel.ExchangeDeclare(exchange: Name, type: ExchangeType.Direct);
+
+                // declare the exchange
+                channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Direct);
+
+                // Declare the queue
+                channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false);
+
+                // Connection queue with exchange
+                channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: "");
+
                 return true;
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }

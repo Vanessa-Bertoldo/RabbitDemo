@@ -76,9 +76,9 @@ namespace RabbitDemo.Controllers.v1
         /// </summary>
         /// <returns>200</returns>
         [HttpGet("create-exchange-direct")]
-        public IActionResult CreateExchangeDirect([FromQuery] string exchangeName)
+        public IActionResult CreateExchangeDirect([FromQuery] string exchangeName, string queueName)
         {
-            var retornMethod = _rabbitMQService.CreateExchangeDirect(exchangeName);
+            var retornMethod = _rabbitMQService.CreateExchangeDirect(exchangeName, queueName);
             return Ok(retornMethod);
         }
 
